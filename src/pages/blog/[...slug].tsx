@@ -28,18 +28,18 @@ export default function Blog({content}: {
         <div>
             {/*{JSON.stringify(content.headings)}*/}
             <link rel="stylesheet" type="text/css"
-                  href="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/blog.markdown.css"/>
+                  href="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/blog.markdown.css" media="print" onload="this.media='all'"/>
             <link rel="stylesheet" type="text/css"
-                  href="https://cdn.jsdelivr.net/gh/Daemonite/material@master/css/material.min.css"/>
+                  href="https://cdn.jsdelivr.net/gh/Daemonite/material@master/css/material.min.css" media="print" onload="this.media='all'"/>
             <link rel="stylesheet" type="text/css"
-                  href="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/lightbox.css"/>
-            <Script defer src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></Script>
-            <Script defer
+                  href="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/lightbox.css" media="print" onload="this.media='all'"/>
+            <Script defer async src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></Script>
+            <Script defer async
                     src="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/darkmode_init.js"></Script>
-            <Script defer
+            <Script defer async
                     src="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/history/history.js"></Script>
-            <Script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></Script>
-            <Script type={"module"} src={'/scripts/lightbox.js'}/>
+            <Script defer async src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></Script>
+            <Script defer type={"module"} src={'/scripts/lightbox.js'}/>
             <button style={{position: "fixed", top: "1rem", backgroundColor: "white", left: "1rem", padding: "1rem",}}
                     onClick={() => setOpen(!open)}>
                 <img
