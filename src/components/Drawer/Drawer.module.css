@@ -1,0 +1,63 @@
+
+.Drawer {
+    opacity: 1;
+    transition: opacity 0.15s linear;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    position: fixed;
+    top: 0;
+    overscroll-behavior-y: contain;
+    animation-duration: 0.5s;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 999;
+}
+.DrawerBackdropOpen {
+    position: fixed;
+    z-index: 998;
+    height: 100vh;
+    width: 100vw;
+    top: 0; left:0; right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.25s linear;
+}
+.DrawerBackdropClose {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.25s, opacity 0.25s linear;
+}
+.DrawerOpen {
+    transform: scaleX(1);
+}
+
+.DrawerClosed {
+    transform: scaleX(0);
+}
+
+.DrawerOpening {
+    animation-name: DrawerAnimationOpen;
+}
+
+.DrawerClosing {
+    animation-name: DrawerAnimationClose;
+}
+
+@keyframes DrawerAnimationClose {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}
+
+@keyframes DrawerAnimationOpen {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
