@@ -20,4 +20,4 @@ const lazyLoadCSS = paths =>
             )
             : undefined
     );
-lazyLoadCSS(['https://cdn.jsdelivr.net/gh/Daemonite/material@master/css/material.min.css', 'https://docs.cloud.kabeers.network/static/research-kabeersnetwork/lightbox.css'])
+lazyLoadCSS([ 'https://docs.cloud.kabeers.network/static/research-kabeersnetwork/lightbox.css'])

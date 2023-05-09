@@ -32,7 +32,7 @@ export default function BlogLayout(props) {
         <Fragment>
             <Fragment>
                 <link rel="stylesheet" type="text/css"
-                      href="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/blog.markdown.min.css"
+                      href="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/blog-markdown-slim.css"
                 />
                 <Script defer async
                         src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></Script>
@@ -98,11 +98,11 @@ function Blog({content, slug, host}: {
                         src="https://docs.cloud.kabeers.network/c/synced/62809a4b62d2c---menu_FILL0_wght400_GRAD0_opsz48.png"
                         style={{width: "1rem", height: "1rem"}} alt={"Hamburger"}/>
                 </button>
-                <Drawer PaperProps={{style: {width: '30vw', minWidth: "20rem", maxWidth: "30rem"}}}
+                <Drawer PaperProps={{style: {width: '40vw', minWidth: "20rem", maxWidth: "40rem"}}}
                         onClose={() => setOpen(false)} open={open}>
                     {content.image && <img loading={"lazy"} style={{width: '100%', padding: 1, height: 'auto'}} src={content.image}/>}
                     <div style={{padding: '1.5rem',}}>
-                        <h3>{content.heading}</h3>
+                        <h2>{content.heading}</h2>
                         <small style={{fontSize: 15}}>{content.tagline}</small>
                         <div style={{display: 'flex', overflowX: "scroll", marginTop: "1.5rem"}}>
                             {content.tags.map(tag => <div
@@ -115,13 +115,13 @@ function Blog({content, slug, host}: {
                         <ul className="navdrawer-nav mt-1">
                             {content.headings.map((heading, index) => (
                                 <li className="nav-item" key={heading.id}>
-                                    <a className="nav-link"
+                                    <div className="nav-link"
                                        onClick={() => document.getElementById(heading.id).scrollIntoView()}>
                                         <div
                                             style={{marginLeft: index ? content.configuration.spacing[heading.type] : 0}}>
                                             {heading.content}
                                         </div>
-                                    </a>
+                                    </div>
                                 </li>
                             ))}
                         </ul>
@@ -138,7 +138,7 @@ function Blog({content, slug, host}: {
                 </Drawer>
             </Fragment>}
             <div style={{display: 'flex', width: '100%', justifyContent: "center"}}>
-                <div className={"container gallery"} style={{
+                <div className={"container gallery markdown-body"} style={{
                     padding: '2rem',
                     width: '100%',
                     maxWidth: '80rem',
