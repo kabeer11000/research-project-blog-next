@@ -40,7 +40,7 @@ export default function BlogLayout(props) {
                         src="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/darkmode_init.js"></Script>
                 <Script defer async
                         src="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/history/history.js"></Script>
-                <Script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></Script>
+                {/*<Script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></Script>*/}
                 <Script type={"module"} src={'/scripts/lightbox.js'}></Script>
 
                 <link rel="preconnect" href="https://docs.cloud.kabeers.network" crossOrigin/>
