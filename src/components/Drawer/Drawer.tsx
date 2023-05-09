@@ -33,7 +33,7 @@ const Drawer: FC<DrawerProps> = ({open, children, onClose, attachment = "left", 
                     left: 0,
                     transformOrigin: "0% 50%"
                 },
-                width: "20rem",
+                width: open ? "20rem" : 0,
                 background: "white",
                 height: "100vh",
                 ...(PaperProps?.style ?? {})
