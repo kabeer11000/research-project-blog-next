@@ -1,4 +1,4 @@
-import React, {CSSProperties, FC, ReactNode, useEffect, useState} from 'react';
+import React, {CSSProperties, FC, Fragment, ReactNode, useEffect, useState} from 'react';
 import styles from './Drawer.module.css';
 
 interface DrawerProps {
@@ -24,7 +24,7 @@ const Drawer: FC<DrawerProps> = ({open, children, onClose, attachment = "left", 
         )
     }, [open]);
     return (
-        <div>
+        <Fragment>
             <div className={classes.join(" ")} style={{
                 ...attachment === "right" ? {
                     right: 0,
@@ -42,7 +42,7 @@ const Drawer: FC<DrawerProps> = ({open, children, onClose, attachment = "left", 
             </div>
             <div tabIndex={-1} onClick={onClose}
                  className={open ? styles.DrawerBackdropOpen : styles.DrawerBackdropClose}/>
-        </div>
+        </Fragment>
     );
 }
 

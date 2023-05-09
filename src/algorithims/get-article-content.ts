@@ -6,6 +6,7 @@ export interface IArticleContent {
     heading: string,
     image: string | null,
     html: string,
+    type: string | null,
     configuration: object,
     tagline: string,
     headings: Array<{ content: string, type: "h1" | "h2" | "h3", id: string, mappedId: string }>
@@ -17,15 +18,15 @@ export async function getArticleContent(slug: string): Promise<IArticleContent> 
     const parsedDocument = await parse(document);
     const META_DATA = parsedDocument.querySelector("#BLOG_META_DATA");
     const headings = [];
-    parsedDocument.querySelectorAll("h1,h2,h3").forEach(el =>
-        headings.push({
-            content: el.innerText,
-            type: el.tagName.toLowerCase(),
-            id: el.getAttribute('id'),
-            mappedId: el.getAttribute('data-map-id') ?? ""
-        }));
+    parsedDocument.querySelectorAll("h1, h2, h3").forEach(el => headings.push({
+        content: el.innerText,
+        type: el.tagName.toLowerCase(),
+        id: el.getAttribute('id'),
+        mappedId: el.getAttribute('data-map-id') ?? ""
+    }));
     const text = [];
-    parsedDocument.querySelectorAll("p,pre").forEach((el) => text.push(el.textContent));
+    parsedDocument.querySelectorAll("img, iframe").forEach((el) => el.setAttribute("loading", 'lazy'));
+    parsedDocument.querySelectorAll("p, pre").forEach((el) => text.push(el.textContent));
     return {
         tags: META_DATA
             ? (META_DATA.getAttribute("tags")?.length ? (META_DATA.getAttribute("tags")?.toString())?.split("|")?.map(t => (t.toString() + "").trim()) : []) : [],
@@ -37,6 +38,9 @@ export async function getArticleContent(slug: string): Promise<IArticleContent> 
         image: (META_DATA
             ? META_DATA.getAttribute("cover-image")
             : parsedDocument.querySelectorAll("img")[0]?.getAttribute("src")) ?? null,
+        type: META_DATA
+            ? <string>META_DATA.getAttribute("cover-image")
+            : null,
         tagline: META_DATA
             ? META_DATA.getAttribute("excerpt") ?? ""
             : text.join().substring(0, 100).concat("... ") || "",
