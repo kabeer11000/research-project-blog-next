@@ -42,6 +42,13 @@ export default function BlogLayout(props) {
                         src="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/history/history.js"></Script>
                 <Script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></Script>
                 <Script type={"module"} src={'/scripts/lightbox.js'}></Script>
+
+                <link rel="preconnect" href="https://docs.cloud.kabeers.network" crossOrigin/>
+                {/*<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin/>*/}
+                {/*<link*/}
+                {/*    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400&display=swap"*/}
+                {/*    rel="stylesheet"*/}
+                {/*/>*/}
             </Fragment>
             <Blog {...props}/>
         </Fragment>
