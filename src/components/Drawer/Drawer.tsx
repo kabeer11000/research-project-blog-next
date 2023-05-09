@@ -14,7 +14,7 @@ interface DrawerProps {
 
 const Drawer: FC<DrawerProps> = ({open, children, onClose, attachment = "left", PaperProps}) => {
     const animDuration = 1;
-    const [classes, setClasses] = useState([styles.Drawer]);
+    const [classes, setClasses] = useState([styles.Drawer, (open ? styles.DrawerOpen : styles.DrawerClosed)]);
     useEffect(() => {
         open ? (
             setClasses(([styles.Drawer, styles.DrawerOpening])),
@@ -41,7 +41,8 @@ const Drawer: FC<DrawerProps> = ({open, children, onClose, attachment = "left", 
                 {children}
             </div>
             <div tabIndex={-1} onClick={onClose}
-                 className={open ? styles.DrawerBackdropOpen : styles.DrawerBackdropClose}/>
+                 className={open ? styles.DrawerBackdropOpen : styles.DrawerBackdropClose}
+            />
         </Fragment>
     );
 }

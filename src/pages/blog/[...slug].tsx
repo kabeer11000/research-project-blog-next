@@ -18,7 +18,7 @@ export default function BlogLayout(props) {
         <Fragment>
             <Fragment>
                 <link rel="stylesheet" type="text/css"
-                      href="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/blog.markdown.css"
+                      href="https://docs.cloud.kabeers.network/static/research-kabeersnetwork/blog.markdown.min.css"
                 />
                 <Script defer async
                         src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></Script>
@@ -79,7 +79,7 @@ function Blog({content, slug, host}: {
                 </button>
                 <Drawer PaperProps={{style: {width: '30vw', minWidth: "20rem", maxWidth: "30rem"}}}
                         onClose={() => setOpen(false)} open={open}>
-                    {content.image && <img style={{width: '100%', padding: 1, height: 'auto'}} src={content.image}/>}
+                    {content.image && <img loading={"lazy"} style={{width: '100%', padding: 1, height: 'auto'}} src={content.image}/>}
                     <div style={{padding: '1.5rem',}}>
                         <h3>{content.heading}</h3>
                         <small style={{fontSize: 15}}>{content.tagline}</small>

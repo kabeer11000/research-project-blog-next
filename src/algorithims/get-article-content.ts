@@ -25,7 +25,7 @@ export async function getArticleContent(slug: string): Promise<IArticleContent> 
         mappedId: el.getAttribute('data-map-id') ?? ""
     }));
     const text = [];
-    parsedDocument.querySelectorAll("img, iframe").forEach((el) => el.setAttribute("loading", 'lazy'));
+    parsedDocument.querySelectorAll("img, iframe").forEach((el) => el.setAttribute("loading", 'lazy').setAttribute("fetchpriority", "low"));
     parsedDocument.querySelectorAll("p, pre").forEach((el) => text.push(el.textContent));
     return {
         tags: META_DATA
