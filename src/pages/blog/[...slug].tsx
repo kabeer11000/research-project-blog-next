@@ -6,12 +6,26 @@ import sanitizeHtml from 'sanitize-html';
 import Script from "next/script";
 import Head from "next/head";
 
-export async function getServerSideProps({params: {slug}, req}) {
+export async function getStaticPaths() {
+    const {articles} = await (await fetch(`https://kabeers-papers-pdf2image.000webhostapp.com/kabeer-chats-storage/research-next-articles/d62112cbb4c43e808738bc335b3cd53c.json`)).json();
+    console.log(articles[0].item.path.split("/").slice(2, -1))
+    return {
+        paths: articles.map(({item}) => ({params: {slug: item.path.split("/").slice(2, -1)}})),
+        fallback: false, // can also be true or 'blocking'
+    };
+}
+export async function getStaticProps({params: {slug}, req}) {
     const content = await getArticleContent(slug.join("/"));
     return ({
-        props: {content, slug: '/blog/' + slug.join("/"), host: req.headers["host"]}
+        props: {content, slug: '/blog/' + slug.join("/"), host: process.env["HOST_NAME"]}
     })
 }
+// export async function getServerSideProps({params: {slug}, req}) {
+//     const content = await getArticleContent(slug.join("/"));
+//     return ({
+//         props: {content, slug: '/blog/' + slug.join("/"), host: req.headers["host"]}
+//     })
+// }
 
 export default function BlogLayout(props) {
     return (
