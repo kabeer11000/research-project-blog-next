@@ -2,7 +2,9 @@ const API = !!(parseInt(process.env.USE_API_PROXY)) ? "https://kabeers.network/r
 export const base = (path: undefined | string) => `${API}${path ? "" + path : ""}?ref=redirector-content`;
 export const getDirectoryContent = async (path: undefined | string) => {
     const response = await fetch(base(path));
-    return response.json();
+    const r = await response.json();
+    console.log(r)
+    return r
 }
 export const getFilesFromDirectory = async (path?: undefined | string, cache?) => {
     if (cache) return JSON.parse(require("fs").readFileSync("/Users/asadrizvi/Documents/Projects/research-projects/blog-next/public/files/directory.json", {encoding: 'utf-8'}))

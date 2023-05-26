@@ -8,5 +8,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="darkmode-js" level="application" />
+    <orderEntry type="library" name="history" level="application" />
+    <orderEntry type="library" name="darkmode_init" level="application" />
+    <orderEntry type="library" name="blog-markdown-slim" level="application" />
   </component>
 </module>

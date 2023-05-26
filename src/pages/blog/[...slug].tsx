@@ -2,24 +2,33 @@ import {Fragment, useEffect, useState} from "react";
 import {getArticleContent, IArticleContent} from "@/algorithims/get-article-content";
 import Drawer from "@/components/Drawer/Drawer";
 import Chip from "@/components/Chip/Chip";
-import sanitizeHtml from 'sanitize-html';
+// import sanitizeHtml from 'sanitize-html';
 import Script from "next/script";
 import Head from "next/head";
-
+import Markdown from 'markdown-to-jsx';
+//
 export async function getStaticPaths() {
-    const {articles} = await (await fetch(`https://kabeers-papers-pdf2image.000webhostapp.com/kabeer-chats-storage/research-next-articles/d62112cbb4c43e808738bc335b3cd53c.json`)).json();
-    console.log(articles[0].item.path.split("/").slice(2, -1))
+    const configFile = 'd96adc6e6e381541929b516f6fc88c0d.json'
+    //d62112cbb4c43e808738bc335b3cd53c.json
+    // const {articles} = await (await fetch(`https://kabeers-papers-pdf2image.000webhostapp.com/kabeer-chats-storage/research-next-articles/${configFile}`)).json();
+    // return {
+    //     paths: articles.filter(x => !!x).map(({item}) => ({params: {slug: item.path.split("/").slice(2, -1)}})),
+    //     fallback: false, // can also be true or 'blocking'
+    // };
+    const {files} = await (await fetch(`https://kabeers-papers-pdf2image.000webhostapp.com/kabeer-chats-storage/research-next-articles/${configFile}`)).json();
     return {
-        paths: articles.map(({item}) => ({params: {slug: item.path.split("/").slice(2, -1)}})),
+        paths: files.filter(x => !!x).map(({path}) => ({params: {slug: path.split("/").slice(2, -1)}})),
         fallback: false, // can also be true or 'blocking'
     };
 }
+
 export async function getStaticProps({params: {slug}, req}) {
     const content = await getArticleContent(slug.join("/"));
     return ({
         props: {content, slug: '/blog/' + slug.join("/"), host: process.env["HOST_NAME"]}
     })
 }
+
 // export async function getServerSideProps({params: {slug}, req}) {
 //     const content = await getArticleContent(slug.join("/"));
 //     return ({
@@ -59,13 +68,18 @@ function Blog({content, slug, host}: {
     slug: string, host: string,
     content: IArticleContent
 }) {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     useEffect(() => {
         if (!window.sessionStorage.getItem("__kn.research.blog.next.blog-welcome:" + slug)) {
             setOpen(true);
             window.sessionStorage.setItem("__kn.research.blog.next.blog-welcome:" + slug, "1");
         }
-    }, [])
+        window.addEventListener('message', (a) => {
+            console.log(a, "A");
+            if (a.data === "KN_HTML_VIEWER_PARENT_BUTTON") setOpen(!open)
+        }, false);
+    }, []);
+    console.log(content)
     return (
         <div>
             <Head>
@@ -98,74 +112,59 @@ function Blog({content, slug, host}: {
                         src="https://docs.cloud.kabeers.network/c/synced/62809a4b62d2c---menu_FILL0_wght400_GRAD0_opsz48.png"
                         style={{width: "1rem", height: "1rem"}} alt={"Hamburger"}/>
                 </button>
-                <Drawer PaperProps={{style: {width: '40vw', minWidth: "20rem", maxWidth: "40rem"}}}
-                        onClose={() => setOpen(false)} open={open}>
-                    {content.image && <img loading={"lazy"} style={{width: '100%', padding: 1, height: 'auto'}} src={content.image}/>}
-                    <div style={{padding: '1.5rem',}}>
-                        <h2>{content.heading}</h2>
-                        <small style={{fontSize: 15}}>{content.tagline}</small>
-                        <div style={{display: 'flex', overflowX: "scroll", marginTop: "1.5rem"}}>
-                            {content.tags.map(tag => <div
-                                    style={{marginRight: '0.5rem'}} key={tag}>
-                                    <Chip content={tag} close={false}/>
-                                </div>
-                            )}
-                        </div>
-                        <br/>
-                        <ul className="navdrawer-nav mt-1">
-                            {content.headings.map((heading, index) => (
-                                <li className="nav-item" key={heading.id}>
-                                    <div className="nav-link"
-                                       onClick={() => document.getElementById(heading.id).scrollIntoView()}>
-                                        <div
-                                            style={{marginLeft: index ? content.configuration.spacing[heading.type] : 0}}>
-                                            {heading.content}
-                                        </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <hr/>
-                    <div style={{padding: "1.5rem"}}>
-                        <ul className="navdrawer-nav">
-                            <a className="nav-item nav-link" href="https://kabeers.network/research/">Home</a>
-                            <a target={"_blank"} className="nav-item nav-link"
-                               href="https://kabeers.network/research/open-analytics/">Open
-                                Analytics</a>
-                        </ul>
-                    </div>
-                </Drawer>
             </Fragment>}
+            <Drawer PaperProps={{style: {width: '40vw', minWidth: "20rem", maxWidth: "40rem"}}}
+                    onClose={() => setOpen(false)} open={open}>
+                {content.image &&
+                    <img loading={"lazy"} style={{width: '100%', padding: 1, height: 'auto'}} src={content.image}
+                         alt={""}/>}
+                <div style={{padding: '1.5rem',}}>
+                    <h2>{content.heading}</h2>
+                    <small style={{fontSize: 15}}>{content.tagline}</small>
+                    <div style={{display: 'flex', overflowX: "scroll", marginTop: "1.5rem"}}>
+                        {content.tags.map(tag => <div
+                                style={{marginRight: '0.5rem'}} key={tag}>
+                                <Chip content={tag} close={false}/>
+                            </div>
+                        )}
+                    </div>
+                    <br/>
+                    <ul className="navdrawer-nav mt-1">
+                        {content.headings.map((heading, index) => (
+                            <li className="nav-item" key={heading.id}>
+                                <div className="nav-link"
+                                     onClick={() => document.getElementById(heading.id).scrollIntoView()}>
+                                    <div
+                                        style={{marginLeft: index ? content.configuration.spacing[heading.type] : 0}}>
+                                        {heading.content}
+                                    </div>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <hr/>
+                <div style={{padding: "1.5rem"}}>
+                    <ul className="navdrawer-nav">
+                        <a className="nav-item nav-link" href="https://kabeers.network/research/">Home</a>
+                        <a target={"_blank"} className="nav-item nav-link"
+                           href="https://kabeers.network/research/open-analytics/">
+                            Open Analytics
+                        </a>
+                    </ul>
+                </div>
+            </Drawer>
             <div style={{display: 'flex', width: '100%', justifyContent: "center"}}>
-                <div className={"container gallery markdown-body"} style={{
-                    padding: '2rem',
-                    width: '100%',
-                    maxWidth: '80rem',
-                    marginTop: "10rem",
-                }}
-                     dangerouslySetInnerHTML={{
-                         __html: content.html || sanitizeHtml(content.html, {
-                             allowedTags: [
-                                 "address", "iframe", "img", "video", "article", "aside", "footer", "header", "h1", "h2", "h3", "h4",
-                                 "h5", "h6", "hgroup", "main", "nav", "section", "blockquote", "dd", "div",
-                                 "dl", "dt", "figcaption", "figure", "hr", "li", "main", "ol", "p", "pre",
-                                 "ul", "a", "abbr", "b", "bdi", "bdo", "br", "cite", "code", "data", "dfn",
-                                 "em", "i", "kbd", "mark", "q", "rb", "rp", "rt", "rtc", "ruby", "s", "samp",
-                                 "small", "span", "strong", "sub", "sup", "time", "u", "var", "wbr", "caption",
-                                 "col", "colgroup", "table", "tbody", "td", "tfoot", "th", "thead", "tr"
-                             ],
-                             disallowedTagsMode: 'escape',
-                             allowedAttributes: false,
-                             selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
-                             allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'tel'],
-                             allowedSchemesByTag: {},
-                             allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
-                             allowProtocolRelative: true,
-                             enforceHtmlBoundary: true,
-                             parseStyleAttributes: true
-                         })
-                     }}/>
+                <div
+                    className={"container gallery markdown-body " + content.type !== "fullscreenembed" ? "container-nofullembed" : ""}
+                    style={{
+                        padding: content.type !== "fullscreenembed" ? '2rem' : 0,
+                        width: '100%',
+                        maxWidth: '80rem',
+                        marginTop: content.type !== "fullscreenembed" ? "10rem" : 0,
+                    }}>
+                    {<Markdown>{content.markdown}</Markdown>}
+                </div>
             </div>
             <div style={{
                 width: '100vw',

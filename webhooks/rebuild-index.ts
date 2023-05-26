@@ -3,7 +3,7 @@ import {CloudBlob} from "@/services/kcs/blob";
 import {getArticle} from "@/algorithims/get-article";
 
 export default async function BuildIndex() {
-    const files = await getFilesFromDirectory(undefined, true);
+    const files = await getFilesFromDirectory(undefined, false);
     const config = {
         blogDelimeter: "blog",
         bucketName: "research-next-articles",
