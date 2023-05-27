@@ -6,7 +6,7 @@ import Chip from "@/components/Chip/Chip";
 import Script from "next/script";
 import Head from "next/head";
 import Markdown from 'markdown-to-jsx';
-//
+
 export async function getStaticPaths() {
     const configFile = 'd96adc6e6e381541929b516f6fc88c0d.json'
     //d62112cbb4c43e808738bc335b3cd53c.json
@@ -68,18 +68,18 @@ function Blog({content, slug, host}: {
     slug: string, host: string,
     content: IArticleContent
 }) {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     useEffect(() => {
         if (!window.sessionStorage.getItem("__kn.research.blog.next.blog-welcome:" + slug)) {
             setOpen(true);
             window.sessionStorage.setItem("__kn.research.blog.next.blog-welcome:" + slug, "1");
         }
-        window.addEventListener('message', (a) => {
-            console.log(a, "A");
-            if (a.data === "KN_HTML_VIEWER_PARENT_BUTTON") setOpen(!open)
+        window.addEventListener('message', (e) => {
+            console.log(e, "A");
+            if (e.data === "KN_HTML_VIEWER_PARENT_BUTTON") setOpen(!open)
         }, false);
+
     }, []);
-    console.log(content)
     return (
         <div>
             <Head>
@@ -163,7 +163,7 @@ function Blog({content, slug, host}: {
                         maxWidth: '80rem',
                         marginTop: content.type !== "fullscreenembed" ? "10rem" : 0,
                     }}>
-                    {<Markdown>{content.markdown}</Markdown>}
+                    {<Markdown>{content.html}</Markdown>}
                 </div>
             </div>
             <div style={{

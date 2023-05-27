@@ -31,14 +31,17 @@ export async function getArticleContent(slug: string): Promise<IArticleContent> 
     parsedDocument.querySelectorAll("p, pre").forEach((el) => text.push(el.textContent));
     parsedDocument.querySelectorAll("iframe").forEach((el) => {
         const currentSrc = new URL(el.getAttribute("src"));
-        if (currentSrc.pathname !== "/static/research-kabeersnetwork/pdf-renderer/pdfjs-2.13.216-dist/web/viewer.html") return;
-        currentSrc.searchParams.append("e", "1");
-        currentSrc.searchParams.append("func", "__KN_EMBEDDED_VIEWER_OPEN_DRAWER");
-        currentSrc.searchParams.append("origin", "http://localhost:3000/blog/" + slug);
-        currentSrc.searchParams.append("button", "intro");
-        el.setAttribute("src", currentSrc.toString());
+        const searchParams = new URLSearchParams(currentSrc.search);
+        if (currentSrc.pathname.split("/").pop() !== "viewer.html") return;
+        console.log("found the iframe")
+        searchParams.append("e", "1");
+        searchParams.append("func", "__KN_EMBEDDED_VIEWER_OPEN_DRAWER");
+        searchParams.append("origin", process.env.ORIGIN);
+        searchParams.append("button", "intro");
+        el.setAttribute("kn-instance", "dqGHF");
+        el.setAttribute("src", (currentSrc.origin).concat(currentSrc.pathname).concat(currentSrc.hash).concat("?" + searchParams.toString()));
     });
-    console.log(markdown)
+    // console.log(markdown)
     return {
         tags: META_DATA
             ? (META_DATA.getAttribute("tags")?.length ? (META_DATA.getAttribute("tags")?.toString())?.split("|")?.map(t => (t.toString() + "").trim()) : []) : [],
@@ -56,7 +59,7 @@ export async function getArticleContent(slug: string): Promise<IArticleContent> 
         tagline: META_DATA
             ? META_DATA.getAttribute("excerpt") ?? ""
             : text.join().substring(0, 100).concat("... ") || "",
-        html: parsedDocument.outerHTML,
+        html: parsedDocument.toString(),
         markdown: markdown ?? "",
         configuration: {
             spacing: {
