@@ -18,6 +18,6 @@ const nextConfig = {
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
 })
-const withPreact = require('next-plugin-preact');
+// const withPreact = require('next-plugin-preact');
 module.exports = (withBundleAnalyzer(nextConfig));
 // module.exports = nextConfig
