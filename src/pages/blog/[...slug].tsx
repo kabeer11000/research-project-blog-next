@@ -8,14 +8,15 @@ import Head from "next/head";
 import Markdown from 'markdown-to-jsx';
 
 export async function getStaticPaths() {
-    const configFile = 'd96adc6e6e381541929b516f6fc88c0d.json'
+    const configFile = process.env.ARTICLE_INDEX;
     //d62112cbb4c43e808738bc335b3cd53c.json
     // const {articles} = await (await fetch(`https://kabeers-papers-pdf2image.000webhostapp.com/kabeer-chats-storage/research-next-articles/${configFile}`)).json();
     // return {
     //     paths: articles.filter(x => !!x).map(({item}) => ({params: {slug: item.path.split("/").slice(2, -1)}})),
     //     fallback: false, // can also be true or 'blocking'
     // };
-    const {files} = await (await fetch(`https://kabeers-papers-pdf2image.000webhostapp.com/kabeer-chats-storage/research-next-articles/${configFile}`)).json();
+    const {files} = await (await fetch(`https://kabeers-papers-pdf2image.000webhostapp.com/kabeer-chats-storage/research-next-articles/${configFile}.json`)).json();
+    console.log(files);
     return {
         paths: files.filter(x => !!x).map(({path}) => ({params: {slug: path.split("/").slice(2, -1)}})),
         fallback: false, // can also be true or 'blocking'
@@ -24,6 +25,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({params: {slug}, req}) {
     const content = await getArticleContent(slug.join("/"));
+    console.log(content);
     return ({
         props: {content, slug: '/blog/' + slug.join("/"), host: process.env["HOST_NAME"]}
     })
