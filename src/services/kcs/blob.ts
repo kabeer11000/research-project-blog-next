@@ -1,21 +1,29 @@
 import FormData from "form-data";
 import {Blob} from "buffer";
 import https from "https";
+
+interface IConfiguration {
+    protocols: ["https:", "http:"],
+    host: string,
+    path: string
+}
+
 export class CloudBlob {
     name: undefined | string;
     formData: FormData;
     id: string;
     blob: Blob;
-    configuration = {
+    configuration: IConfiguration = {
         protocols: ["https:", "http:"],
         host: "kabeers-papers-pdf2image.000webhostapp.com",
         path: "/kabeer-chats-storage/upload.php"
     }
 
-    constructor(name: string) {
+    constructor(name: string, configuration?:IConfiguration) {
         this.name = name;
         this.formData = new FormData();
         this.id = Math.random().toString();
+        if (configuration) this.configuration = configuration;
     }
 
     async merge(file: (Buffer | string)) {
